@@ -25,9 +25,10 @@ const MyApplications = () => {
         ...(filter !== 'ALL' && { status: filter })
       };
       const response = await applicationsAPI.getMyApplications(params);
-      setApplications(response.data.content);
-      setTotalPages(response.data.totalPages);
+      setApplications(response.data?.content || []);
+      setTotalPages(response.data?.totalPages || 0);
     } catch (error) {
+      console.error('Fetch applications error:', error);
       toast.error('Error fetching applications');
     } finally {
       setLoading(false);

@@ -26,9 +26,10 @@ const ManageJobs = () => {
     setLoading(true);
     try {
       const response = await jobsAPI.getMyJobs({ page, size: 10 });
-      setJobs(response.data.content);
-      setTotalPages(response.data.totalPages);
+      setJobs(response.data?.content || []);
+      setTotalPages(response.data?.totalPages || 0);
     } catch (error) {
+      console.error('Fetch jobs error:', error);
       toast.error('Error fetching jobs');
     } finally {
       setLoading(false);

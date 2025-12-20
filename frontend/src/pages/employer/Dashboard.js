@@ -26,7 +26,7 @@ const EmployerDashboard = () => {
     try {
       // Fetch employer's jobs
       const jobsResponse = await jobsAPI.getMyJobs({ page: 0, size: 5 });
-      const jobs = jobsResponse.data.content;
+      const jobs = jobsResponse.data?.content || [];
       setRecentJobs(jobs);
 
       // Calculate stats
@@ -34,15 +34,16 @@ const EmployerDashboard = () => {
       
       // Fetch applications for employer's jobs
       const applicationsResponse = await applicationsAPI.getEmployerApplications({ page: 0, size: 5 });
-      const applications = applicationsResponse.data.content;
+      const applications = applicationsResponse.data?.content || [];
 
       setStats({
-        totalJobs: jobsResponse.data.totalElements,
+        totalJobs: jobsResponse.data?.totalElements || 0,
         activeJobs,
-        totalApplications: applicationsResponse.data.totalElements,
+        totalApplications: applicationsResponse.data?.totalElements || 0,
         recentApplications: applications
       });
     } catch (error) {
+      console.error('Dashboard error:', error);
       toast.error('Error fetching dashboard data');
     } finally {
       setLoading(false);

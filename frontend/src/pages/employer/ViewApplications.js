@@ -34,9 +34,10 @@ const ViewApplications = () => {
         ...(filter !== 'ALL' && { status: filter })
       };
       const appsResponse = await applicationsAPI.getApplicationsForJob(id, params);
-      setApplications(appsResponse.data.content);
-      setTotalPages(appsResponse.data.totalPages);
+      setApplications(appsResponse.data?.content || []);
+      setTotalPages(appsResponse.data?.totalPages || 0);
     } catch (error) {
+      console.error('Fetch applications error:', error);
       toast.error('Error fetching applications');
       navigate('/employer/jobs');
     } finally {

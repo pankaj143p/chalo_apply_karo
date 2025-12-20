@@ -58,7 +58,8 @@ const JobDetail = () => {
       if (isAuthenticated && isJobSeeker) {
         try {
           const applicationsResponse = await applicationsAPI.getMyApplications();
-          const applied = applicationsResponse.data.content.some(
+          const applications = applicationsResponse.data?.content || [];
+          const applied = applications.some(
             app => app.jobId === parseInt(id)
           );
           setHasApplied(applied);

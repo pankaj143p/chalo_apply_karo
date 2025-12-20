@@ -34,9 +34,11 @@ const JobSeekerDashboard = () => {
       // Fetch favorites count
       const favoritesResponse = await favoritesAPI.getMyFavorites({ page: 0, size: 1 });
       
-      // Fetch recommended jobs (latest jobs)
-      const jobsResponse = await jobsAPI.getRecentJobs({ page: 0, size: 4 });
-      setRecommendedJobs(jobsResponse.data?.content || []);
+      // Fetch recommended jobs (latest jobs) - returns array directly
+      const jobsResponse = await jobsAPI.getLatestJobs(4);
+      // The endpoint returns List<JobResponse> directly, not paginated
+      const jobsList = Array.isArray(jobsResponse.data) ? jobsResponse.data : (jobsResponse.data?.content || []);
+      setRecommendedJobs(jobsList);
 
       // Calculate stats
       const pendingApps = applications.filter(app => app.status === 'PENDING').length;

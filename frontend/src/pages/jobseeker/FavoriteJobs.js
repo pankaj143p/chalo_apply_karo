@@ -20,9 +20,10 @@ const FavoriteJobs = () => {
     setLoading(true);
     try {
       const response = await favoritesAPI.getMyFavorites({ page, size: 10 });
-      setFavorites(response.data.content);
-      setTotalPages(response.data.totalPages);
+      setFavorites(response.data?.content || []);
+      setTotalPages(response.data?.totalPages || 0);
     } catch (error) {
+      console.error('Fetch favorites error:', error);
       toast.error('Error fetching favorite jobs');
     } finally {
       setLoading(false);
