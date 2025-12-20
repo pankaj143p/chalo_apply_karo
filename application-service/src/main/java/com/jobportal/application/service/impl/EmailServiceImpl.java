@@ -450,4 +450,239 @@ public class EmailServiceImpl implements EmailService {
                 application.getCompanyName()
             );
     }
+
+    @Override
+    @Async
+    public void sendInterviewScheduleEmail(JobApplication application, String interviewDate, String interviewTime, String interviewType, String interviewLink, String additionalNotes) {
+        if (!emailEnabled) {
+            log.info("Email notifications disabled. Would have sent interview schedule email to: {}", application.getApplicantEmail());
+            return;
+        }
+
+        String subject = "📅 Interview Scheduled - " + application.getJobTitle() + " at " + application.getCompanyName();
+        String body = buildInterviewScheduleEmailBody(application, interviewDate, interviewTime, interviewType, interviewLink, additionalNotes);
+
+        sendEmail(application.getApplicantEmail(), subject, body);
+    }
+
+    @Override
+    @Async
+    public void sendSelectionEmail(JobApplication application, String salary, String joiningDate, String additionalNotes) {
+        if (!emailEnabled) {
+            log.info("Email notifications disabled. Would have sent selection email to: {}", application.getApplicantEmail());
+            return;
+        }
+
+        String subject = "🎉 Congratulations! You're Selected - " + application.getJobTitle() + " at " + application.getCompanyName();
+        String body = buildSelectionEmailBody(application, salary, joiningDate, additionalNotes);
+
+        sendEmail(application.getApplicantEmail(), subject, body);
+    }
+
+    private String buildInterviewScheduleEmailBody(JobApplication application, String interviewDate, String interviewTime, String interviewType, String interviewLink, String additionalNotes) {
+        String linkSection = "";
+        if (interviewLink != null && !interviewLink.isEmpty()) {
+            linkSection = """
+                <p><strong>Meeting Link:</strong> <a href="%s" style="color: #667eea;">%s</a></p>
+                """.formatted(interviewLink, interviewLink);
+        }
+
+        String notesSection = "";
+        if (additionalNotes != null && !additionalNotes.isEmpty()) {
+            notesSection = """
+                <div class="notes-box">
+                    <h4 style="margin-top: 0;">Additional Notes from Employer:</h4>
+                    <p>%s</p>
+                </div>
+                """.formatted(additionalNotes);
+        }
+
+        return """
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; }
+                    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                    .header { background: linear-gradient(135deg, #667eea 0%%, #764ba2 100%%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
+                    .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
+                    .interview-details { background: #e3f2fd; padding: 25px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #2196f3; }
+                    .interview-details h3 { margin-top: 0; color: #1976d2; }
+                    .detail-row { margin: 10px 0; }
+                    .detail-label { font-weight: 600; color: #555; }
+                    .notes-box { background: #fff3e0; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #ff9800; }
+                    .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
+                    .tips-box { background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 20px 0; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <h1>📅 Interview Scheduled!</h1>
+                        <p>Your interview details are ready</p>
+                    </div>
+                    <div class="content">
+                        <p>Dear %s,</p>
+                        
+                        <p>We are pleased to inform you that your interview for the position of <strong>%s</strong> at <strong>%s</strong> has been scheduled!</p>
+                        
+                        <div class="interview-details">
+                            <h3>Interview Details</h3>
+                            <div class="detail-row">
+                                <span class="detail-label">📆 Date:</span> %s
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">⏰ Time:</span> %s
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">📍 Type:</span> %s
+                            </div>
+                            %s
+                        </div>
+                        
+                        %s
+                        
+                        <div class="tips-box">
+                            <h4 style="margin-top: 0;">Tips for your interview:</h4>
+                            <ul>
+                                <li>Join/arrive 10-15 minutes early</li>
+                                <li>Have your resume and portfolio ready</li>
+                                <li>Research about the company beforehand</li>
+                                <li>Prepare questions for the interviewer</li>
+                                <li>Dress professionally</li>
+                            </ul>
+                        </div>
+                        
+                        <p>If you have any questions or need to reschedule, please contact the employer directly.</p>
+                        
+                        <p>Best of luck with your interview!</p>
+                        
+                        <p>Best Regards,<br><strong>%s</strong></p>
+                    </div>
+                    <div class="footer">
+                        <p>This is an automated message from Job Portal. Please do not reply directly to this email.</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+            """.formatted(
+                application.getApplicantName(),
+                application.getJobTitle(),
+                application.getCompanyName(),
+                interviewDate,
+                interviewTime,
+                interviewType,
+                linkSection,
+                notesSection,
+                application.getCompanyName()
+            );
+    }
+
+    private String buildSelectionEmailBody(JobApplication application, String salary, String joiningDate, String additionalNotes) {
+        String salarySection = "";
+        if (salary != null && !salary.isEmpty()) {
+            salarySection = """
+                <div class="detail-row">
+                    <span class="detail-label">💰 Offered Package:</span> %s
+                </div>
+                """.formatted(salary);
+        }
+
+        String joiningSection = "";
+        if (joiningDate != null && !joiningDate.isEmpty()) {
+            joiningSection = """
+                <div class="detail-row">
+                    <span class="detail-label">📅 Expected Joining Date:</span> %s
+                </div>
+                """.formatted(joiningDate);
+        }
+
+        String notesSection = "";
+        if (additionalNotes != null && !additionalNotes.isEmpty()) {
+            notesSection = """
+                <div class="notes-box">
+                    <h4 style="margin-top: 0;">Message from Employer:</h4>
+                    <p>%s</p>
+                </div>
+                """.formatted(additionalNotes);
+        }
+
+        return """
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; }
+                    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                    .header { background: linear-gradient(135deg, #4caf50 0%%, #2e7d32 100%%); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }
+                    .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
+                    .offer-details { background: #e8f5e9; padding: 25px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #4caf50; }
+                    .offer-details h3 { margin-top: 0; color: #2e7d32; }
+                    .detail-row { margin: 10px 0; }
+                    .detail-label { font-weight: 600; color: #555; }
+                    .notes-box { background: #e3f2fd; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #2196f3; }
+                    .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
+                    .celebration { font-size: 40px; text-align: center; margin: 20px 0; }
+                    .next-steps { background: #fff3e0; padding: 15px; border-radius: 8px; margin: 20px 0; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <h1>🎉 Congratulations!</h1>
+                        <p>You've Been Selected!</p>
+                    </div>
+                    <div class="content">
+                        <div class="celebration">🎊 🥳 🎉</div>
+                        
+                        <p>Dear %s,</p>
+                        
+                        <p>We are absolutely thrilled to inform you that you have been <strong>SELECTED</strong> for the position of <strong>%s</strong> at <strong>%s</strong>!</p>
+                        
+                        <div class="offer-details">
+                            <h3>Offer Details</h3>
+                            <div class="detail-row">
+                                <span class="detail-label">🏢 Company:</span> %s
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">💼 Position:</span> %s
+                            </div>
+                            %s
+                            %s
+                        </div>
+                        
+                        %s
+                        
+                        <div class="next-steps">
+                            <h4 style="margin-top: 0;">Next Steps:</h4>
+                            <ol>
+                                <li>Review the offer details carefully</li>
+                                <li>The HR team will contact you with the formal offer letter</li>
+                                <li>Complete any pending documentation</li>
+                                <li>Prepare for your new journey!</li>
+                            </ol>
+                        </div>
+                        
+                        <p>We are excited to have you join the team and look forward to your contributions!</p>
+                        
+                        <p>Warm Regards,<br><strong>%s Team</strong></p>
+                    </div>
+                    <div class="footer">
+                        <p>This is an automated message from Job Portal. Please do not reply directly to this email.</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+            """.formatted(
+                application.getApplicantName(),
+                application.getJobTitle(),
+                application.getCompanyName(),
+                application.getCompanyName(),
+                application.getJobTitle(),
+                salarySection,
+                joiningSection,
+                notesSection,
+                application.getCompanyName()
+            );
+    }
 }

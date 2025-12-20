@@ -110,6 +110,10 @@ export const applicationsAPI = {
     api.get(`/api/applications/check/${jobId}`),
   getApplicationsByStatus: (status, params) => 
     api.get(`/api/applications/status/${status}`, { params }),
+  sendInterviewEmail: (applicationId, data) =>
+    api.post(`/api/applications/${applicationId}/send-interview-email`, data),
+  sendSelectionEmail: (applicationId, data) =>
+    api.post(`/api/applications/${applicationId}/send-selection-email`, data),
 };
 
 // Messages API

@@ -147,4 +147,36 @@ public class JobApplicationController {
         boolean hasApplied = applicationService.hasApplied(jobId, userId);
         return ResponseEntity.ok(Map.of("hasApplied", hasApplied));
     }
+
+    @PostMapping("/{applicationId}/send-interview-email")
+    public ResponseEntity<Map<String, String>> sendInterviewScheduleEmail(
+            @PathVariable(name = "applicationId") Long applicationId,
+            @Valid @RequestBody InterviewScheduleRequest request,
+            @RequestHeader(name = "X-User-Id") Long userId,
+            @RequestHeader(name = "X-User-Role") String userRole) {
+
+        if (!"EMPLOYER".equals(userRole)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        log.info("Sending interview schedule email for application: {}", applicationId);
+        applicationService.sendInterviewScheduleEmail(applicationId, userId, request);
+        return ResponseEntity.ok(Map.of("message", "Interview schedule email sent successfully"));
+    }
+
+    @PostMapping("/{applicationId}/send-selection-email")
+    public ResponseEntity<Map<String, String>> sendSelectionEmail(
+            @PathVariable(name = "applicationId") Long applicationId,
+            @Valid @RequestBody SelectionEmailRequest request,
+            @RequestHeader(name = "X-User-Id") Long userId,
+            @RequestHeader(name = "X-User-Role") String userRole) {
+
+        if (!"EMPLOYER".equals(userRole)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        log.info("Sending selection email for application: {}", applicationId);
+        applicationService.sendSelectionEmail(applicationId, userId, request);
+        return ResponseEntity.ok(Map.of("message", "Selection email sent successfully"));
+    }
 }

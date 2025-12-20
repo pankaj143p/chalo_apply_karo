@@ -255,4 +255,58 @@ public class JobApplicationServiceImpl implements JobApplicationService {
                 .first(applicationPage.isFirst())
                 .build();
     }
+
+    @Override
+    @Transactional
+    public void sendInterviewScheduleEmail(Long applicationId, Long employerId, InterviewScheduleRequest request) {
+        JobApplication application = applicationRepository.findById(applicationId)
+                .orElseThrow(() -> new ResourceNotFoundException(APPLICATION_NOT_FOUND + applicationId));
+
+        // Verify employer owns this application's job
+        if (!application.getEmployerId().equals(employerId)) {
+            throw new UnauthorizedException("You don't have permission to send email for this application");
+        }
+
+        // Update status to INTERVIEW
+        application.setStatus(ApplicationStatus.INTERVIEW);
+        applicationRepository.save(application);
+
+        // Send the interview schedule email
+        emailService.sendInterviewScheduleEmail(
+                application,
+                request.getInterviewDate(),
+                request.getInterviewTime(),
+                request.getInterviewType(),
+                request.getInterviewLink(),
+                request.getAdditionalNotes()
+        );
+
+        log.info("Interview schedule email sent for application: {}", applicationId);
+    }
+
+    @Override
+    @Transactional
+    public void sendSelectionEmail(Long applicationId, Long employerId, SelectionEmailRequest request) {
+        JobApplication application = applicationRepository.findById(applicationId)
+                .orElseThrow(() -> new ResourceNotFoundException(APPLICATION_NOT_FOUND + applicationId));
+
+        // Verify employer owns this application's job
+        if (!application.getEmployerId().equals(employerId)) {
+            throw new UnauthorizedException("You don't have permission to send email for this application");
+        }
+
+        // Update status to ACCEPTED
+        application.setStatus(ApplicationStatus.ACCEPTED);
+        applicationRepository.save(application);
+
+        // Send the selection email
+        emailService.sendSelectionEmail(
+                application,
+                request.getSalary(),
+                request.getJoiningDate(),
+                request.getAdditionalNotes()
+        );
+
+        log.info("Selection email sent for application: {}", applicationId);
+    }
 }

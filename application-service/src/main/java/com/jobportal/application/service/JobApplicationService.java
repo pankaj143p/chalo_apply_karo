@@ -13,4 +13,6 @@ public interface JobApplicationService {
     PagedResponse<ApplicationResponse> getApplicationsByStatus(Long userId, String userRole, ApplicationStatus status, int page, int size);
     void withdrawApplication(Long applicationId, Long applicantId);
     boolean hasApplied(Long jobId, Long applicantId);
+    void sendInterviewScheduleEmail(Long applicationId, Long employerId, InterviewScheduleRequest request);
+    void sendSelectionEmail(Long applicationId, Long employerId, SelectionEmailRequest request);
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaEnvelope, FaCheck, FaTimes, FaEye, FaBriefcase } from 'react-icons/fa';
+import { FaEnvelope, FaCheck, FaTimes, FaEye, FaBriefcase, FaCalendarAlt, FaTrophy } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { applicationsAPI } from '../../services/api';
 import './ViewApplications.css';
@@ -12,6 +12,23 @@ const AllApplications = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [selectedApp, setSelectedApp] = useState(null);
   const [filter, setFilter] = useState('ALL');
+  
+  // Modal states
+  const [showInterviewModal, setShowInterviewModal] = useState(false);
+  const [showSelectionModal, setShowSelectionModal] = useState(false);
+  const [interviewData, setInterviewData] = useState({
+    interviewDate: '',
+    interviewTime: '',
+    interviewType: 'Online',
+    interviewLink: '',
+    additionalNotes: ''
+  });
+  const [selectionData, setSelectionData] = useState({
+    salary: '',
+    joiningDate: '',
+    additionalNotes: ''
+  });
+  const [sendingEmail, setSendingEmail] = useState(false);
 
   useEffect(() => {
     fetchApplications();
@@ -47,6 +64,69 @@ const AllApplications = () => {
     } catch (error) {
       console.error('Status update error:', error);
       toast.error('Error updating application status');
+    }
+  };
+
+  const openInterviewModal = () => {
+    setInterviewData({
+      interviewDate: '',
+      interviewTime: '',
+      interviewType: 'Online',
+      interviewLink: '',
+      additionalNotes: ''
+    });
+    setShowInterviewModal(true);
+  };
+
+  const openSelectionModal = () => {
+    setSelectionData({
+      salary: '',
+      joiningDate: '',
+      additionalNotes: ''
+    });
+    setShowSelectionModal(true);
+  };
+
+  const handleSendInterviewEmail = async (e) => {
+    e.preventDefault();
+    if (!interviewData.interviewDate || !interviewData.interviewTime) {
+      toast.error('Please fill in interview date and time');
+      return;
+    }
+
+    setSendingEmail(true);
+    try {
+      await applicationsAPI.sendInterviewEmail(selectedApp.id, interviewData);
+      toast.success('Interview schedule email sent successfully!');
+      setShowInterviewModal(false);
+      fetchApplications();
+      if (selectedApp) {
+        setSelectedApp({ ...selectedApp, status: 'INTERVIEW' });
+      }
+    } catch (error) {
+      console.error('Error sending interview email:', error);
+      toast.error('Error sending interview email');
+    } finally {
+      setSendingEmail(false);
+    }
+  };
+
+  const handleSendSelectionEmail = async (e) => {
+    e.preventDefault();
+    setSendingEmail(true);
+    try {
+      await applicationsAPI.sendSelectionEmail(selectedApp.id, selectionData);
+      toast.success('Selection email sent successfully! Candidate accepted!');
+      setShowSelectionModal(false);
+      fetchApplications();
+      if (selectedApp) {
+        setSelectedApp({ ...selectedApp, status: 'ACCEPTED' });
+      }
+    } catch (error) {
+      console.error('Error sending selection email:', error);
+      toast.error('Error sending selection email');
+    } finally {
+      setSendingEmail(false);
     }
   };
 
@@ -216,18 +296,18 @@ const AllApplications = () => {
                        selectedApp.status !== 'REJECTED' && (
                         <button
                           className="btn btn-info btn-sm"
-                          onClick={() => handleStatusUpdate(selectedApp.id, 'INTERVIEW')}
+                          onClick={openInterviewModal}
                         >
-                          <FaCheck /> Interview
+                          <FaCalendarAlt /> Schedule Interview
                         </button>
                       )}
                       {selectedApp.status !== 'ACCEPTED' && selectedApp.status !== 'REJECTED' && (
                         <>
                           <button
                             className="btn btn-success btn-sm"
-                            onClick={() => handleStatusUpdate(selectedApp.id, 'ACCEPTED')}
+                            onClick={openSelectionModal}
                           >
-                            <FaCheck /> Accept
+                            <FaTrophy /> Select & Send Offer
                           </button>
                           <button
                             className="btn btn-danger btn-sm"
@@ -281,6 +361,152 @@ const AllApplications = () => {
           </div>
         )}
       </div>
+
+      {/* Interview Schedule Modal */}
+      {showInterviewModal && (
+        <div className="modal-overlay" onClick={() => setShowInterviewModal(false)}>
+          <div className="modal-content email-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2><FaCalendarAlt /> Schedule Interview</h2>
+              <button className="modal-close" onClick={() => setShowInterviewModal(false)}>&times;</button>
+            </div>
+            <form onSubmit={handleSendInterviewEmail}>
+              <div className="modal-body">
+                <p className="modal-info">
+                  Send interview details to <strong>{selectedApp?.applicantName}</strong> for <strong>{selectedApp?.jobTitle}</strong>
+                </p>
+                
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Interview Date *</label>
+                    <input
+                      type="date"
+                      className="form-control"
+                      value={interviewData.interviewDate}
+                      onChange={(e) => setInterviewData({...interviewData, interviewDate: e.target.value})}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Interview Time *</label>
+                    <input
+                      type="time"
+                      className="form-control"
+                      value={interviewData.interviewTime}
+                      onChange={(e) => setInterviewData({...interviewData, interviewTime: e.target.value})}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label>Interview Type *</label>
+                  <select
+                    className="form-control"
+                    value={interviewData.interviewType}
+                    onChange={(e) => setInterviewData({...interviewData, interviewType: e.target.value})}
+                  >
+                    <option value="Online">Online (Video Call)</option>
+                    <option value="In-Person">In-Person</option>
+                    <option value="Phone">Phone Interview</option>
+                  </select>
+                </div>
+
+                {interviewData.interviewType === 'Online' && (
+                  <div className="form-group">
+                    <label>Meeting Link</label>
+                    <input
+                      type="url"
+                      className="form-control"
+                      placeholder="https://meet.google.com/... or https://zoom.us/..."
+                      value={interviewData.interviewLink}
+                      onChange={(e) => setInterviewData({...interviewData, interviewLink: e.target.value})}
+                    />
+                  </div>
+                )}
+
+                <div className="form-group">
+                  <label>Additional Notes</label>
+                  <textarea
+                    className="form-control"
+                    rows="3"
+                    placeholder="Any additional instructions for the candidate..."
+                    value={interviewData.additionalNotes}
+                    onChange={(e) => setInterviewData({...interviewData, additionalNotes: e.target.value})}
+                  ></textarea>
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={() => setShowInterviewModal(false)}>
+                  Cancel
+                </button>
+                <button type="submit" className="btn btn-primary" disabled={sendingEmail}>
+                  {sendingEmail ? 'Sending...' : 'Send Interview Email'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Selection Email Modal */}
+      {showSelectionModal && (
+        <div className="modal-overlay" onClick={() => setShowSelectionModal(false)}>
+          <div className="modal-content email-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2><FaTrophy /> Send Selection Offer</h2>
+              <button className="modal-close" onClick={() => setShowSelectionModal(false)}>&times;</button>
+            </div>
+            <form onSubmit={handleSendSelectionEmail}>
+              <div className="modal-body">
+                <p className="modal-info success-info">
+                  🎉 Congratulations! You're about to send a selection email to <strong>{selectedApp?.applicantName}</strong> for <strong>{selectedApp?.jobTitle}</strong>
+                </p>
+                
+                <div className="form-group">
+                  <label>Salary Package (Optional)</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="e.g., ₹6,00,000 - ₹8,00,000 per annum"
+                    value={selectionData.salary}
+                    onChange={(e) => setSelectionData({...selectionData, salary: e.target.value})}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Expected Joining Date (Optional)</label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    value={selectionData.joiningDate}
+                    onChange={(e) => setSelectionData({...selectionData, joiningDate: e.target.value})}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Additional Message</label>
+                  <textarea
+                    className="form-control"
+                    rows="4"
+                    placeholder="Add any personalized message for the candidate..."
+                    value={selectionData.additionalNotes}
+                    onChange={(e) => setSelectionData({...selectionData, additionalNotes: e.target.value})}
+                  ></textarea>
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={() => setShowSelectionModal(false)}>
+                  Cancel
+                </button>
+                <button type="submit" className="btn btn-success" disabled={sendingEmail}>
+                  {sendingEmail ? 'Sending...' : '🎉 Send Selection Email'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

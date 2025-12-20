@@ -430,3 +430,130 @@
     justify-content: center;
   }
 }
+
+/* Email Modal Styles */
+.email-modal {
+  max-width: 550px;
+  width: 95%;
+}
+
+.email-modal .modal-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px 25px;
+  border-radius: 10px 10px 0 0;
+}
+
+.email-modal .modal-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.3rem;
+  margin: 0;
+}
+
+.email-modal .modal-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s;
+}
+
+.email-modal .modal-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.email-modal .modal-body {
+  padding: 25px;
+}
+
+.modal-info {
+  background: #e3f2fd;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  color: #1565c0;
+  border-left: 4px solid #2196f3;
+}
+
+.modal-info.success-info {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border-left-color: #4caf50;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.email-modal .form-control {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.email-modal .form-control:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.email-modal textarea.form-control {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.email-modal .modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 20px 25px;
+  border-top: 1px solid #eee;
+}
+
+.btn-info {
+  background: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%);
+  color: white;
+}
+
+.btn-info:hover {
+  background: linear-gradient(135deg, #0097a7 0%, #00838f 100%);
+}
+
+@media (max-width: 500px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .email-modal .modal-footer {
+    flex-direction: column;
+  }
+  
+  .email-modal .modal-footer .btn {
+    width: 100%;
+  }
+}
