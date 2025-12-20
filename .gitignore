@@ -1,0 +1,139 @@
+# =====================
+# Java / Maven
+# =====================
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+*.class
+*.jar
+*.war
+*.ear
+*.log
+*.ctxt
+.mtj.tmp/
+*.nar
+*.zip
+*.tar.gz
+*.rar
+hs_err_pid*
+replay_pid*
+
+# =====================
+# IDE - IntelliJ IDEA
+# =====================
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+# =====================
+# IDE - Eclipse
+# =====================
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+# =====================
+# IDE - VS Code
+# =====================
+.vscode/
+*.code-workspace
+
+# =====================
+# Node / React
+# =====================
+frontend/node_modules/
+frontend/build/
+frontend/dist/
+frontend/.pnp
+frontend/.pnp.js
+frontend/coverage/
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# =====================
+# Environment & Config Files (Sensitive)
+# =====================
+*.env
+.env.*
+!.env.example
+
+# Application YML files with credentials
+**/src/main/resources/application.yml
+**/src/main/resources/application.yaml
+**/src/main/resources/application-*.yml
+**/src/main/resources/application-*.yaml
+!**/src/main/resources/application.example.yml
+
+# Properties files
+**/src/main/resources/application.properties
+**/src/main/resources/application-*.properties
+!**/src/main/resources/application.example.properties
+
+# =====================
+# Secrets & Credentials
+# =====================
+*.pem
+*.key
+*.p12
+*.jks
+*.keystore
+secrets/
+credentials/
+*.secret
+
+# =====================
+# Logs
+# =====================
+logs/
+*.log
+/tmp/
+
+# =====================
+# OS Generated
+# =====================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# =====================
+# Database
+# =====================
+*.db
+*.sqlite
+*.sqlite3
+
+# =====================
+# Docker
+# =====================
+.docker/
+
+# =====================
+# Misc
+# =====================
+*.bak
+*.swp
+*.swo
+*~
+.cache/
