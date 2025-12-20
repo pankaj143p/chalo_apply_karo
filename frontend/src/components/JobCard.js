@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaMapMarkerAlt, FaClock, FaBuilding, FaHeart, FaRegHeart } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaClock, FaBuilding, FaHeart, FaRegHeart, FaCalendarAlt } from 'react-icons/fa';
 import './JobCard.css';
 
 const JobCard = ({ job, onFavoriteToggle, showFavorite = true }) => {
@@ -28,6 +28,19 @@ const JobCard = ({ job, onFavoriteToggle, showFavorite = true }) => {
     if (diff < 7) return `${diff} days ago`;
     if (diff < 30) return `${Math.floor(diff / 7)} weeks ago`;
     return date.toLocaleDateString();
+  };
+
+  const formatDeadline = (dateString) => {
+    if (!dateString) return null;
+    const date = new Date(dateString);
+    const now = new Date();
+    const diff = Math.floor((date - now) / (1000 * 60 * 60 * 24));
+    
+    if (diff < 0) return { text: 'Expired', isExpired: true };
+    if (diff === 0) return { text: 'Today', isExpired: false, isUrgent: true };
+    if (diff === 1) return { text: '1 day left', isExpired: false, isUrgent: true };
+    if (diff < 7) return { text: `${diff} days left`, isExpired: false, isUrgent: true };
+    return { text: date.toLocaleDateString(), isExpired: false, isUrgent: false };
   };
 
   const getJobTypeBadge = () => {
@@ -91,6 +104,12 @@ const JobCard = ({ job, onFavoriteToggle, showFavorite = true }) => {
           <FaClock />
           {formatDate(job.createdAt)}
         </span>
+        {job.applicationDeadline && (
+          <span className={`job-card-meta-item deadline ${formatDeadline(job.applicationDeadline)?.isExpired ? 'expired' : ''} ${formatDeadline(job.applicationDeadline)?.isUrgent ? 'urgent' : ''}`}>
+            <FaCalendarAlt />
+            {formatDeadline(job.applicationDeadline)?.text}
+          </span>
+        )}
       </div>
 
       <p className="job-card-description">

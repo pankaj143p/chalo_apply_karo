@@ -10,7 +10,8 @@ import {
   FaRegHeart,
   FaArrowLeft,
   FaShareAlt,
-  FaPaperPlane
+  FaPaperPlane,
+  FaCalendarAlt
 } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { jobsAPI, applicationsAPI, favoritesAPI } from '../services/api';
@@ -266,6 +267,13 @@ const JobDetail = () => {
               <p className="posted-date">
                 <FaClock /> Posted {formatDate(job.createdAt)}
               </p>
+              
+              {job.applicationDeadline && (
+                <p className={`deadline-date ${new Date(job.applicationDeadline) < new Date() ? 'expired' : ''}`}>
+                  <FaCalendarAlt /> Deadline: {formatDate(job.applicationDeadline)}
+                  {new Date(job.applicationDeadline) < new Date() && <span className="deadline-expired"> (Expired)</span>}
+                </p>
+              )}
 
               {hasApplied ? (
                 <button className="btn btn-primary" disabled>

@@ -95,6 +95,31 @@
   color: var(--gray-400);
 }
 
+.job-card-meta-item.deadline {
+  color: #27ae60;
+  font-weight: 500;
+}
+
+.job-card-meta-item.deadline svg {
+  color: #27ae60;
+}
+
+.job-card-meta-item.deadline.urgent {
+  color: #f39c12;
+}
+
+.job-card-meta-item.deadline.urgent svg {
+  color: #f39c12;
+}
+
+.job-card-meta-item.deadline.expired {
+  color: #e74c3c;
+}
+
+.job-card-meta-item.deadline.expired svg {
+  color: #e74c3c;
+}
+
 .job-card-description {
   font-size: 14px;
   color: var(--gray-600);

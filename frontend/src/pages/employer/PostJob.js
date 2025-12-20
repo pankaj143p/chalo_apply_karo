@@ -23,7 +23,8 @@ const PostJob = () => {
     salaryMax: '',
     skills: '',
     companyName: '',
-    status: 'ACTIVE'
+    status: 'ACTIVE',
+    applicationDeadline: ''
   });
 
   useEffect(() => {
@@ -49,7 +50,8 @@ const PostJob = () => {
         salaryMax: job.salaryMax || '',
         skills: job.skills?.join(', ') || '',
         companyName: job.companyName || '',
-        status: job.status || 'ACTIVE'
+        status: job.status || 'ACTIVE',
+        applicationDeadline: job.applicationDeadline ? job.applicationDeadline.substring(0, 16) : ''
       });
     } catch (error) {
       toast.error('Error fetching job details');
@@ -111,7 +113,8 @@ const PostJob = () => {
         requirements: formData.requirements?.trim() || null,
         skills: formData.skills
           ? formData.skills.split(',').map(skill => skill.trim()).filter(Boolean)
-          : []
+          : [],
+        applicationDeadline: formData.applicationDeadline ? formData.applicationDeadline + ':00' : null
       };
 
       if (isEditing) {
@@ -258,6 +261,20 @@ const PostJob = () => {
                     <option value="DRAFT">Draft</option>
                   </select>
                 </div>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="applicationDeadline">Application Deadline</label>
+                <input
+                  type="datetime-local"
+                  id="applicationDeadline"
+                  name="applicationDeadline"
+                  className="form-input"
+                  value={formData.applicationDeadline}
+                  onChange={handleChange}
+                  min={new Date().toISOString().slice(0, 16)}
+                />
+                <small className="form-hint">Leave empty if there's no deadline</small>
               </div>
             </div>
 
