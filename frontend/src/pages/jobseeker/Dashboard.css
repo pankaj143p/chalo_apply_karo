@@ -16,3 +16,52 @@
 .status-icon.pending {
   color: #ffc107;
 }
+
+/* Status badges for recent applications */
+.status-badge {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.status-badge.pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-badge.reviewed {
+  background: #cce5ff;
+  color: #004085;
+}
+
+.status-badge.shortlisted {
+  background: #fff0b3;
+  color: #b8860b;
+}
+
+.status-badge.interview {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
+.status-badge.offered {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status-badge.accepted {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-badge.rejected {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.status-badge.withdrawn {
+  background: #e2e3e5;
+  color: #383d41;
+}

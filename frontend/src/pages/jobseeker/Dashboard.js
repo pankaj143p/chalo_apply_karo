@@ -28,7 +28,7 @@ const JobSeekerDashboard = () => {
     try {
       // Fetch applications
       const applicationsResponse = await applicationsAPI.getMyApplications({ page: 0, size: 5 });
-      const applications = applicationsResponse.data.content;
+      const applications = applicationsResponse.data?.content || [];
       setRecentApplications(applications);
 
       // Fetch favorites count
@@ -36,17 +36,18 @@ const JobSeekerDashboard = () => {
       
       // Fetch recommended jobs (latest jobs)
       const jobsResponse = await jobsAPI.getRecentJobs({ page: 0, size: 4 });
-      setRecommendedJobs(jobsResponse.data.content);
+      setRecommendedJobs(jobsResponse.data?.content || []);
 
       // Calculate stats
       const pendingApps = applications.filter(app => app.status === 'PENDING').length;
       
       setStats({
-        totalApplications: applicationsResponse.data.totalElements,
+        totalApplications: applicationsResponse.data?.totalElements || 0,
         pendingApplications: pendingApps,
-        favoriteJobs: favoritesResponse.data.totalElements
+        favoriteJobs: favoritesResponse.data?.totalElements || 0
       });
     } catch (error) {
+      console.error('Dashboard error:', error);
       toast.error('Error fetching dashboard data');
     } finally {
       setLoading(false);
@@ -65,8 +66,10 @@ const JobSeekerDashboard = () => {
   const getStatusIcon = (status) => {
     switch (status) {
       case 'ACCEPTED':
+      case 'OFFERED':
         return <FaCheckCircle className="status-icon accepted" />;
       case 'PENDING':
+      case 'REVIEWED':
         return <FaClock className="status-icon pending" />;
       default:
         return null;

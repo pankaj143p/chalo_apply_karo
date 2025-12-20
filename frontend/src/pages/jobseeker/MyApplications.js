@@ -64,6 +64,7 @@ const MyApplications = () => {
       case 'REVIEWED': return 'reviewed';
       case 'SHORTLISTED': return 'shortlisted';
       case 'INTERVIEW': return 'interview';
+      case 'OFFERED': return 'offered';
       case 'WITHDRAWN': return 'withdrawn';
       default: return 'pending';
     }
@@ -92,8 +93,10 @@ const MyApplications = () => {
               <option value="REVIEWED">Reviewed</option>
               <option value="SHORTLISTED">Shortlisted</option>
               <option value="INTERVIEW">Interview</option>
+              <option value="OFFERED">Offered</option>
               <option value="ACCEPTED">Accepted</option>
               <option value="REJECTED">Rejected</option>
+              <option value="WITHDRAWN">Withdrawn</option>
             </select>
           </div>
         </div>

@@ -127,6 +127,11 @@
   color: #4338ca;
 }
 
+.status-badge.offered {
+  background: #d1fae5;
+  color: #065f46;
+}
+
 .status-badge.accepted {
   background: #d4edda;
   color: #155724;
