@@ -23,7 +23,7 @@ const PrivateRoute = ({ children, allowedRoles }) => {
     if (user.role === 'EMPLOYER') {
       return <Navigate to="/employer/dashboard" replace />;
     } else {
-      return <Navigate to="/seeker/dashboard" replace />;
+      return <Navigate to="/jobseeker/dashboard" replace />;
     }
   }
 

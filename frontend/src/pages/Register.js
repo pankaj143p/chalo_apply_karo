@@ -56,7 +56,7 @@ const Register = () => {
       if (user.role === 'EMPLOYER') {
         navigate('/employer/dashboard');
       } else {
-        navigate('/seeker/dashboard');
+        navigate('/jobseeker/dashboard');
       }
     } catch (error) {
       toast.error(error.response?.data?.message || 'Registration failed');
