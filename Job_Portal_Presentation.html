@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Portal - Project Presentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+        
+        .slide {
+            width: 100%;
+            max-width: 1000px;
+            margin: 20px auto;
+            background: white;
+            padding: 60px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            page-break-after: always;
+            min-height: 700px;
+            border-radius: 10px;
+        }
+        
+        .slide-title {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            text-align: center;
+            color: white;
+            padding: 80px 60px;
+        }
+        
+        .slide-title h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+        }
+        
+        .slide-title h2 {
+            font-size: 1.5em;
+            font-weight: 400;
+            margin-bottom: 60px;
+        }
+        
+        .slide-title .presenter-info {
+            margin-top: 40px;
+            font-size: 1.1em;
+        }
+        
+        .slide-title .presenter-info p {
+            margin: 10px 0;
+        }
+        
+        h1 {
+            color: #667eea;
+            font-size: 2.2em;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+        }
+        
+        h2 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin: 25px 0 15px 0;
+        }
+        
+        h3 {
+            color: #333;
+            font-size: 1.2em;
+            margin: 20px 0 10px 0;
+        }
+        
+        ul {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+        
+        li {
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        
+        .architecture-box {
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 20px 0;
+        }
+        
+        .column {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .column h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .feature-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #764ba2;
+        }
+        
+        .workflow-box {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .workflow-arrow {
+            font-size: 1.5em;
+            color: #667eea;
+            margin: 0 10px;
+        }
+        
+        .status-flow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .status-badge {
+            background: #667eea;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .conclusion-box {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .future-box {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #ff9800;
+        }
+        
+        .thank-you {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        
+        .thank-you h2 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        
+        .contact-info {
+            margin-top: 30px;
+            font-size: 1.1em;
+        }
+        
+        .emoji {
+            font-size: 1.2em;
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+        
+        @media print {
+            .slide {
+                box-shadow: none;
+                margin: 0;
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Slide 1: Title -->
+<div class="slide slide-title">
+    <h1>🎯 JOB PORTAL</h1>
+    <h2>A Full-Stack Job Search System<br>Built with Spring Boot Microservices & React</h2>
+    
+    <div class="presenter-info">
+        <p><strong>Presented By:</strong> [Your Name]</p>
+        <p><strong>Roll No:</strong> [Your Roll Number]</p>
+        <p><strong>Course:</strong> [Your Course Name]</p>
+        <p><strong>Guide:</strong> [Your Guide's Name]</p>
+        <p><strong>Date:</strong> December 2025</p>
+    </div>
+</div>
+
+<!-- Slide 2: Introduction & Problem Statement -->
+<div class="slide">
+    <h1>📋 Introduction & Problem Statement</h1>
+    
+    <h2>📌 Introduction</h2>
+    <p style="font-size: 1.1em; margin-bottom: 20px;">
+        Job Portal is a comprehensive web application that connects job seekers with employers through a modern, scalable microservices-based platform. The system provides real-time application tracking, email notifications, and a seamless user experience.
+    </p>
+    
+    <h2>📌 Problem Statement</h2>
+    <ul>
+        <li>Traditional job search methods are time-consuming and inefficient</li>
+        <li>Lack of real-time application status tracking for candidates</li>
+        <li>No centralized platform for comprehensive job management</li>
+        <li>Difficulty in connecting qualified candidates with relevant employers</li>
+        <li>Manual application processes lead to delays and miscommunication</li>
+    </ul>
+    
+    <h2>📌 Solution</h2>
+    <div class="conclusion-box">
+        <p>A microservices-based job portal with real-time email notifications, application status tracking, and seamless user experience for both job seekers and employers.</p>
+    </div>
+</div>
+
+<!-- Slide 3: Features -->
+<div class="slide">
+    <h1>✨ Features</h1>
+    
+    <div class="two-columns">
+        <div class="column">
+            <h3>👤 For Job Seekers</h3>
+            <ul>
+                <li>🔍 Search & filter jobs by location, type, experience</li>
+                <li>📝 Apply with cover letter & resume</li>
+                <li>❤️ Save favorite jobs</li>
+                <li>📊 Track application status</li>
+                <li>📧 Email notifications on status changes</li>
+                <li>📈 Personal dashboard with statistics</li>
+            </ul>
+        </div>
+        <div class="column">
+            <h3>👔 For Employers</h3>
+            <ul>
+                <li>📮 Post new job listings</li>
+                <li>✏️ Edit and manage postings</li>
+                <li>🔄 Activate/Deactivate jobs</li>
+                <li>👥 View and manage applications</li>
+                <li>📋 Update application status</li>
+                <li>📈 Dashboard with hiring statistics</li>
+            </ul>
+        </div>
+    </div>
+    
+    <h2>📊 Application Status Flow</h2>
+    <div class="status-flow">
+        <span class="status-badge">PENDING</span>
+        <span class="workflow-arrow">→</span>
+        <span class="status-badge">REVIEWED</span>
+        <span class="workflow-arrow">→</span>
+        <span class="status-badge">SHORTLISTED</span>
+        <span class="workflow-arrow">→</span>
+        <span class="status-badge">INTERVIEW</span>
+        <span class="workflow-arrow">→</span>
+        <span class="status-badge" style="background: #4caf50;">ACCEPTED</span>
+    </div>
+</div>
+
+<!-- Slide 4: System Architecture -->
+<div class="slide">
+    <h1>🏗️ System Architecture</h1>
+    
+    <div class="architecture-box">
+┌─────────────────────────────────────────────────────────────┐
+│                    Frontend (React)                          │
+│                      Port: 3000                              │
+└─────────────────────────┬───────────────────────────────────┘
+                          │
+                          ▼
+┌─────────────────────────────────────────────────────────────┐
+│                 API Gateway (Spring Cloud)                   │
+│                      Port: 8080                              │
+│               • JWT Authentication Filter                    │
+│               • Request Routing                              │
+└─────────────────────────┬───────────────────────────────────┘
+                          │
+          ┌───────────────┼───────────────┐
+          │               │               │
+          ▼               ▼               ▼
+┌─────────────┐   ┌─────────────┐   ┌─────────────┐
+│Auth Service │   │ Job Service │   │ Application │
+│ Port: 8081  │   │ Port: 8082  │   │   Service   │
+│ • Register  │   │ • CRUD Jobs │   │ Port: 8083  │
+│ • Login     │   │ • Search    │   │ • Apply     │
+│ • JWT Token │   │ • Favorites │   │ • Email     │
+└──────┬──────┘   └──────┬──────┘   └──────┬──────┘
+       └─────────────────┼─────────────────┘
+                         ▼
+              ┌─────────────────────┐
+              │ PostgreSQL Database │
+              │ Eureka Server: 8761 │
+              └─────────────────────┘
+    </div>
+</div>
+
+<!-- Slide 5: Technology Stack -->
+<div class="slide">
+    <h1>🛠️ Technology Stack</h1>
+    
+    <div class="two-columns">
+        <div class="column">
+            <h3>🔧 Backend Technologies</h3>
+            <table>
+                <tr><th>Technology</th><th>Version</th></tr>
+                <tr><td>☕ Java</td><td>17</td></tr>
+                <tr><td>🍃 Spring Boot</td><td>3.2.0</td></tr>
+                <tr><td>☁️ Spring Cloud</td><td>2023.0.0</td></tr>
+                <tr><td>🚪 Spring Cloud Gateway</td><td>-</td></tr>
+                <tr><td>📋 Netflix Eureka</td><td>-</td></tr>
+                <tr><td>💾 Spring Data JPA</td><td>-</td></tr>
+                <tr><td>📧 Spring Mail</td><td>-</td></tr>
+                <tr><td>🔐 JWT</td><td>-</td></tr>
+            </table>
+        </div>
+        <div class="column">
+            <h3>🎨 Frontend Technologies</h3>
+            <table>
+                <tr><th>Technology</th><th>Purpose</th></tr>
+                <tr><td>⚛️ React 18</td><td>UI Framework</td></tr>
+                <tr><td>🔀 React Router</td><td>Routing</td></tr>
+                <tr><td>📡 Axios</td><td>HTTP Client</td></tr>
+                <tr><td>🔔 React Toastify</td><td>Notifications</td></tr>
+                <tr><td>🎭 React Icons</td><td>Icons</td></tr>
+            </table>
+            <h3 style="margin-top: 20px;">🗄️ Database</h3>
+            <table>
+                <tr><td>🐘 PostgreSQL</td><td>Version 15</td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 6: Application Modules -->
+<div class="slide">
+    <h1>📦 Application Modules</h1>
+    
+    <h2>Backend Microservices</h2>
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Service</th>
+            <th>Port</th>
+            <th>Responsibilities</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td><strong>Eureka Server</strong></td>
+            <td>8761</td>
+            <td>Service Discovery & Registration</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td><strong>API Gateway</strong></td>
+            <td>8080</td>
+            <td>Entry Point, JWT Filter, Routing</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td><strong>Auth Service</strong></td>
+            <td>8081</td>
+            <td>Registration, Login, Token Management</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td><strong>Job Service</strong></td>
+            <td>8082</td>
+            <td>Job CRUD, Search, Filters, Favorites</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td><strong>Application Service</strong></td>
+            <td>8083</td>
+            <td>Applications, Status, Email Notifications</td>
+        </tr>
+    </table>
+    
+    <h2>Frontend Pages</h2>
+    <div class="feature-grid">
+        <div class="feature-item"><strong>Home</strong> - Landing page</div>
+        <div class="feature-item"><strong>Job Search</strong> - Search with filters</div>
+        <div class="feature-item"><strong>Job Detail</strong> - Full info & apply</div>
+        <div class="feature-item"><strong>Login/Register</strong> - Authentication</div>
+        <div class="feature-item"><strong>Job Seeker Dashboard</strong> - Stats & applications</div>
+        <div class="feature-item"><strong>Employer Dashboard</strong> - Post & manage jobs</div>
+    </div>
+</div>
+
+<!-- Slide 7: Application Workflow -->
+<div class="slide">
+    <h1>🔄 Application Workflow</h1>
+    
+    <h2>Job Seeker Workflow</h2>
+    <div class="workflow-box">
+        <strong>Register/Login</strong> <span class="workflow-arrow">→</span>
+        <strong>Search Jobs</strong> <span class="workflow-arrow">→</span>
+        <strong>View Details</strong> <span class="workflow-arrow">→</span>
+        <strong>Apply</strong> <span class="workflow-arrow">→</span>
+        <strong>Track Status</strong> <span class="workflow-arrow">→</span>
+        <strong>Email Alerts</strong>
+    </div>
+    
+    <h2>Employer Workflow</h2>
+    <div class="workflow-box">
+        <strong>Register/Login</strong> <span class="workflow-arrow">→</span>
+        <strong>Post Job</strong> <span class="workflow-arrow">→</span>
+        <strong>View Applicants</strong> <span class="workflow-arrow">→</span>
+        <strong>Update Status</strong> <span class="workflow-arrow">→</span>
+        <strong>Candidate Notified</strong>
+    </div>
+    
+    <h2>Key Highlights</h2>
+    <div class="two-columns">
+        <div class="column">
+            <h3>🔒 Security</h3>
+            <ul>
+                <li>JWT-based authentication</li>
+                <li>Role-based access control</li>
+                <li>Secure API Gateway</li>
+            </ul>
+        </div>
+        <div class="column">
+            <h3>📧 Notifications</h3>
+            <ul>
+                <li>Email on application submit</li>
+                <li>Email on status change</li>
+                <li>Real-time toast alerts</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 8: Conclusion & Thank You -->
+<div class="slide">
+    <h1>📌 Conclusion</h1>
+    
+    <div class="conclusion-box">
+        <h3>✅ Achievements</h3>
+        <ul>
+            <li>Successfully developed a <strong>scalable microservices-based</strong> job portal</li>
+            <li>Implemented <strong>secure JWT authentication</strong> across all services</li>
+            <li>Built <strong>real-time email notifications</strong> for status updates</li>
+            <li>Created <strong>user-friendly interfaces</strong> for job seekers & employers</li>
+            <li>Achieved <strong>separation of concerns</strong> with independent services</li>
+        </ul>
+    </div>
+    
+    <div class="future-box">
+        <h3>🚀 Future Enhancements</h3>
+        <ul>
+            <li>🤖 AI-based job recommendations</li>
+            <li>📄 Resume parsing and skill extraction</li>
+            <li>🎥 Video interview integration</li>
+            <li>📱 Mobile application (Android/iOS)</li>
+            <li>💬 Real-time chat between users</li>
+        </ul>
+    </div>
+    
+    <div class="thank-you">
+        <h2>🙏 Thank You!</h2>
+        <p style="font-size: 1.3em;">Questions & Discussion Welcome</p>
+        <div class="contact-info">
+            <p>📧 Email: [Your Email Address]</p>
+            <p>🔗 GitHub: github.com/pankaj143p/chalo_apply_karo</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
